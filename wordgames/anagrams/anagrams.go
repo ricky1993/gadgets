@@ -40,11 +40,18 @@ func main() {
 	GeneratePermutations(lettersRune, "", &permutations)
 	wordsToSearch := deduplicateSortedStrings(permutations)
 	// Test the Trie with some example words
+	ret := []string{}
 	for _, word := range wordsToSearch {
 		found := trie.Search(word)
 		if found {
-			fmt.Printf("Word '%s' founded in dictionary\n", word)
+			ret = append(ret, word)
 		}
+	}
+	sort.Slice(ret, func(i, j int) bool {
+		return len(ret[i]) < len(ret[j])
+	})
+	for _, word := range ret {
+		fmt.Println(word)
 	}
 }
 
