@@ -36,12 +36,15 @@ func main() {
 
 	lettersRune := []rune(letters)
 
-	wordsToSearch := []string{}
-	GeneratePermutations(lettersRune, "", &wordsToSearch)
+	permutations := []string{}
+	GeneratePermutations(lettersRune, "", &permutations)
+	wordsToSearch := deduplicateSortedStrings(permutations)
 	// Test the Trie with some example words
 	for _, word := range wordsToSearch {
 		found := trie.Search(word)
-		fmt.Printf("Word '%s' found in dictionary: %v\n", word, found)
+		if found {
+			fmt.Printf("Word '%s' founded in dictionary\n", word)
+		}
 	}
 }
 
@@ -123,4 +126,23 @@ func GeneratePermutationsWithLength(length int, letters []rune, current string, 
 		// Recursively generate permutations
 		GeneratePermutationsWithLength(length, remainingLetters, current+string(letter), permutations)
 	}
+}
+
+func deduplicateSortedStrings(input []string) []string {
+	if len(input) <= 1 {
+		return input // No duplicates to remove
+	}
+
+	// Initialize the result slice with the first element
+	result := []string{input[0]}
+
+	// Iterate through the sorted list and remove duplicates
+	for i := 1; i < len(input); i++ {
+		// Compare the current element with the previous one
+		if input[i] != input[i-1] {
+			result = append(result, input[i]) // Unique element, add to the result
+		}
+	}
+
+	return result
 }
